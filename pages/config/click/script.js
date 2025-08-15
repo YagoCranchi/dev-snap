@@ -39,8 +39,6 @@ function loadClickConfig() {
 function saveClickConfig() {
     const selector = document.getElementById('selectorInput').value.trim();
     const delay = parseInt(document.getElementById('delayInput').value) || 0;
-    console.log("selector");
-    console.log(selector);
     
     if (!selector) {
         return;

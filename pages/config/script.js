@@ -82,6 +82,12 @@ function renderFunctionalityTable() {
             funcSpan.addEventListener('click', () => openClickConfig(index));
         }
         
+        if (functionalityName === 'value') {
+            funcSpan.style.cursor = 'pointer';
+            funcSpan.style.textDecoration = 'underline';
+            funcSpan.addEventListener('click', () => openValueConfig(index));
+        }
+        
         upButton.textContent = '↑';
         upButton.disabled = index === 0;
         upButton.addEventListener('click', () => moveUp(index));
@@ -167,4 +173,8 @@ function saveConfig() {
 
 function openClickConfig(index) {
     window.location.href = `click/index.html?ip=${encodeURIComponent(currentIP)}&index=${index}`;
+}
+
+function openValueConfig(index) {
+    window.location.href = `value/index.html?ip=${encodeURIComponent(currentIP)}&index=${index}`;
 }

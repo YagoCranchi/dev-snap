@@ -1,62 +1,70 @@
 let currentIP = '';
-let clickIndex = '';
+let valueIndex = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     getParams();
-    loadClickConfig();
+    loadValueConfig();
     attachEventListeners();
 });
 
 function getParams() {
     const urlParams = new URLSearchParams(window.location.search);
     currentIP = urlParams.get('ip') || '';
-    clickIndex = urlParams.get('index') || '';
-    document.getElementById('clickTitle').textContent = `Configurar Click - ${currentIP}`;
+    valueIndex = urlParams.get('index') || '';
+    document.getElementById('valueTitle').textContent = `Configurar Value - ${currentIP}`;
 }
 
 function attachEventListeners() {
     document.getElementById('backButton').addEventListener('click', goBack);
-    document.getElementById('saveClickButton').addEventListener('click', saveClickConfig);
+    document.getElementById('saveValueButton').addEventListener('click', saveValueConfig);
 }
 
 function goBack() {
     window.location.href = `../index.html?ip=${encodeURIComponent(currentIP)}`;
 }
 
-function loadClickConfig() {
+function loadValueConfig() {
     chrome.storage.sync.get('devSnapFaciliterConfigs', (result) => {
         const configs = result.devSnapFaciliterConfigs || {};
         const ipConfig = configs[currentIP] || [];
-        const clickItem = ipConfig[parseInt(clickIndex)];
+        const valueItem = ipConfig[parseInt(valueIndex)];
         
-        if (clickItem && clickItem.clickConfig) {
-            document.getElementById('selectorInput').value = clickItem.clickConfig.selector || '';
-            document.getElementById('delayInput').value = clickItem.clickConfig.delay || 0;
+        if (valueItem && valueItem.valueConfig) {
+            document.getElementById('selectorInput').value = valueItem.valueConfig.selector || '';
+            document.getElementById('newValueInput').value = valueItem.valueConfig.value || '';
+            document.getElementById('delayInput').value = valueItem.valueConfig.delay || 0;
         }
     });
 }
 
-function saveClickConfig() {
+function saveValueConfig() {
     const selector = document.getElementById('selectorInput').value.trim();
+    const newValue = document.getElementById('newValueInput').value.trim();
     const delay = parseInt(document.getElementById('delayInput').value) || 0;
     
     if (!selector) {
         alert('Por favor, digite um seletor CSS');
         return;
     }
-
+    
+    if (!newValue) {
+        alert('Por favor, digite um valor');
+        return;
+    }
+    
     chrome.storage.sync.get('devSnapFaciliterConfigs', (result) => {
         const configs = result.devSnapFaciliterConfigs || {};
         const ipConfig = configs[currentIP] || [];
         
-        if (ipConfig[parseInt(clickIndex)]) {
-            ipConfig[parseInt(clickIndex)].clickConfig = {
+        if (ipConfig[parseInt(valueIndex)]) {
+            ipConfig[parseInt(valueIndex)].valueConfig = {
                 selector: selector,
+                value: newValue,
                 delay: delay
             };
             
             configs[currentIP] = ipConfig;
-
+            
             chrome.storage.sync.set({ devSnapFaciliterConfigs: configs }, () => {
                 goBack();
             });

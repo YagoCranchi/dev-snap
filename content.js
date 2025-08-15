@@ -42,11 +42,25 @@ function checkCurrentIP() {
                           const { selector, delay } = functionality.clickConfig;
                           setTimeout(() => {
                             const element = document.querySelector(selector);
-                            console.log(element);
                             if (element) {
                               element.click();
                             } else {
-                              console.log(`Elemento não encontrado: ${selector}`);
+                              console.error(`Elemento não encontrado: ${selector}`);
+                            }
+                          }, delay);
+                        }
+                        break;
+                      case 'value':
+                        if (typeof functionality === 'object' && functionality.valueConfig) {
+                          const { selector, value, delay } = functionality.valueConfig;
+                          setTimeout(() => {
+                            const element = document.querySelector(selector);
+                            if (element) {
+                              element.value = value;
+                              const event = new Event('input', { bubbles: true });
+                              element.dispatchEvent(event);
+                            } else {
+                              console.error(`Elemento não encontrado: ${selector}`);
                             }
                           }, delay);
                         }
