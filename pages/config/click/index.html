@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar Click</title>
+    <link rel="stylesheet" href="click-style.css">
+</head>
+<body>
+    <div>
+        <button id="backButton">← Voltar</button>
+        <h2 id="clickTitle">Configurar Click</h2>
+        
+        <div>
+            <h3>Configurações do Click:</h3>
+            
+            <div>
+                <label for="selectorInput">Seletor CSS:</label>
+                <input type="text" id="selectorInput" placeholder="ex: #botao, .classe, button">
+            </div>
+            
+            <div>
+                <label for="delayInput">Delay (ms):</label>
+                <input type="number" id="delayInput" placeholder="0" min="0">
+            </div>
+        </div>
+        
+        <button id="saveClickButton">Salvar Click</button>
+    </div>
+    
+    <script src="click-script.js"></script>
+</body>
+</html>
