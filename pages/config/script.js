@@ -166,5 +166,5 @@ function saveConfig() {
 }
 
 function openClickConfig(index) {
-    window.location.href = `/pages/config/click/index.html?ip=${encodeURIComponent(currentIP)}&index=${index}`;
+    window.location.href = `click/index.html?ip=${encodeURIComponent(currentIP)}&index=${index}`;
 }

@@ -27,25 +27,32 @@ function checkCurrentIP() {
                 .forEach((functionality, index) => {
                     const functionalityName = typeof functionality === 'object' ? functionality.name : functionality;
                     
-                    if (functionalityName === 'ip') {
+                    switch (functionalityName) {
+                      case 'ip':
                         console.log(ip);
-                    } else if (functionalityName === 'ping') {
+                        break;
+                      case 'ping':
                         console.log('ping');
-                    } else if (functionalityName === 'passo') {
+                        break;
+                      case 'passo':
                         console.log(index + 1);
-                    } else if (functionalityName === 'click') {
+                        break;
+                      case 'click':
                         if (typeof functionality === 'object' && functionality.clickConfig) {
-                            const { selector, delay } = functionality.clickConfig;
-                            setTimeout(() => {
-                                const element = document.querySelector(selector);
-                                if (element) {
-                                    element.click();
-                                    console.log(`Clicou em: ${selector}`);
-                                } else {
-                                    console.log(`Elemento não encontrado: ${selector}`);
-                                }
-                            }, delay);
+                          const { selector, delay } = functionality.clickConfig;
+                          setTimeout(() => {
+                            const element = document.querySelector(selector);
+                            console.log(element);
+                            if (element) {
+                              element.click();
+                            } else {
+                              console.log(`Elemento não encontrado: ${selector}`);
+                            }
+                          }, delay);
                         }
+                        break;
+                      default:
+                        break;
                     }
                 });
         }
