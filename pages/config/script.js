@@ -150,10 +150,6 @@ function loadIPConfig() {
             });
         } else {
             functionalities = [];
-            let order = 0;
-            if (ipConfig.ping) functionalities.push({ name: 'ping', order: order++ });
-            if (ipConfig.ip) functionalities.push({ name: 'ip', order: order++ });
-            if (ipConfig.passo) functionalities.push({ name: 'passo', order: order++ });
         }
         
         renderFunctionalityTable();

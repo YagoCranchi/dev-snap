@@ -28,24 +28,16 @@ function checkCurrentIP() {
                     const functionalityName = typeof functionality === 'object' ? functionality.name : functionality;
                     
                     switch (functionalityName) {
-                      case 'ip':
-                        console.log(ip);
-                        break;
-                      case 'ping':
-                        console.log('ping');
-                        break;
-                      case 'passo':
-                        console.log(index + 1);
-                        break;
                       case 'click':
                         if (typeof functionality === 'object' && functionality.clickConfig) {
                           const { selector, delay } = functionality.clickConfig;
                           setTimeout(() => {
-                            const element = document.querySelector(selector);
+                            const escapedSelector = selector.replace(/\\\\/g, '\\');
+                            const element = document.querySelector(escapedSelector);
                             if (element) {
                               element.click();
                             } else {
-                              console.error(`Elemento não encontrado: ${selector}`);
+                              console.error(`Elemento não encontrado: ${escapedSelector}`);
                             }
                           }, delay);
                         }
@@ -54,13 +46,14 @@ function checkCurrentIP() {
                         if (typeof functionality === 'object' && functionality.valueConfig) {
                           const { selector, value, delay } = functionality.valueConfig;
                           setTimeout(() => {
-                            const element = document.querySelector(selector);
+                            const escapedSelector = selector.replace(/\\\\/g, '\\');
+                            const element = document.querySelector(escapedSelector);
                             if (element) {
                               element.value = value;
                               const event = new Event('input', { bubbles: true });
                               element.dispatchEvent(event);
                             } else {
-                              console.error(`Elemento não encontrado: ${selector}`);
+                              console.error(`Elemento não encontrado: ${escapedSelector}`);
                             }
                           }, delay);
                         }
