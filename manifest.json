@@ -3,7 +3,7 @@
   "name": "dev-snap",
   "version": "1.0",
   "description": "Facilitador de tarefas",
-  "permissions": ["storage"],
+  "permissions": ["storage", "tabs"],
   "background": {
     "service_worker": "background.js"
   },

@@ -7,9 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function attachEventListeners() {
     const addButton = document.getElementById('addButton');
+    const addCurrentUrlButton = document.getElementById('addCurrentUrlButton');
     const ipInput = document.getElementById('ipInput');
     
     addButton.addEventListener('click', addIP);
+    addCurrentUrlButton.addEventListener('click', addCurrentUrl);
     
     ipInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
@@ -35,6 +37,36 @@ function addIP() {
     saveIPs();
     ipInput.value = '';
     renderTable();
+}
+
+function addCurrentUrl() {
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        if (tabs[0]) {
+            const currentUrl = tabs[0].url;
+            
+            let urlToAdd = '';
+            try {
+                const url = new URL(currentUrl);
+                urlToAdd = url.protocol + '//' + url.host + url.pathname;
+                
+                if (urlToAdd.endsWith('/') && url.pathname !== '/') {
+                    urlToAdd = urlToAdd.slice(0, -1);
+                }
+            } catch (e) {
+                console.error('URL inválida:', currentUrl);
+                return;
+            }
+            
+            if (ips.includes(urlToAdd)) {
+                console.log('URL já cadastrada:', urlToAdd);
+                return;
+            }
+            
+            ips.push(urlToAdd);
+            saveIPs();
+            renderTable();
+        }
+    });
 }
 
 function removeIP(ip) {
