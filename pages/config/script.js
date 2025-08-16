@@ -90,6 +90,12 @@ function renderFunctionalityTable() {
             funcSpan.addEventListener('click', () => openValueConfig(index));
         }
         
+        if (functionalityName === 'redirect') {
+            funcSpan.style.cursor = 'pointer';
+            funcSpan.style.textDecoration = 'underline';
+            funcSpan.addEventListener('click', () => openRedirectConfig(index));
+        }
+        
         upButton.textContent = '↑';
         upButton.disabled = index === 0;
         upButton.addEventListener('click', () => moveUp(index));
@@ -175,4 +181,8 @@ function openClickConfig(index) {
 
 function openValueConfig(index) {
     window.location.href = `value/index.html?ip=${encodeURIComponent(currentIP)}&index=${index}`;
+}
+
+function openRedirectConfig(index) {
+    window.location.href = `redirect/index.html?ip=${encodeURIComponent(currentIP)}&index=${index}`;
 }

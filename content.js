@@ -58,6 +58,18 @@ function checkCurrentIP() {
                           }, delay);
                         }
                         break;
+                      case 'redirect':
+                        if (typeof functionality === 'object' && functionality.redirectConfig) {
+                          const { url, delay, newTab } = functionality.redirectConfig;
+                          setTimeout(() => {
+                            if (newTab) {
+                              window.open(url, '_blank');
+                            } else {
+                              window.location.href = url;
+                            }
+                          }, delay);
+                        }
+                        break;
                       default:
                         break;
                     }
