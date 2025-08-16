@@ -15,7 +15,6 @@ function getCurrentIP() {
 
 function attachEventListeners() {
     document.getElementById('backButton').addEventListener('click', goBack);
-    document.getElementById('saveButton').addEventListener('click', saveConfig);
     document.getElementById('addFunctionButton').addEventListener('click', addFunctionality);
     
     const select = document.getElementById('functionalitySelect');
@@ -42,11 +41,14 @@ function addFunctionality() {
     functionalities.push(newItem);
     select.value = '';
     renderFunctionalityTable();
+
+    saveConfig();
 }
 
 function removeFunctionality(index) {
     functionalities.splice(index, 1);
     renderFunctionalityTable();
+    saveConfig();
 }
 
 function renderFunctionalityTable() {
@@ -113,6 +115,7 @@ function moveUp(index) {
         [functionalities[index], functionalities[index - 1]] = [functionalities[index - 1], functionalities[index]];
         updateOrders();
         renderFunctionalityTable();
+        saveConfig();
     }
 }
 
@@ -121,6 +124,7 @@ function moveDown(index) {
         [functionalities[index], functionalities[index + 1]] = [functionalities[index + 1], functionalities[index]];
         updateOrders();
         renderFunctionalityTable();
+        saveConfig();
     }
 }
 
@@ -161,9 +165,7 @@ function saveConfig() {
         const configs = result.devSnapFaciliterConfigs || {};
         configs[currentIP] = functionalities;
 
-        chrome.storage.sync.set({ devSnapFaciliterConfigs: configs }, () => {
-            goBack();
-        });
+        chrome.storage.sync.set({ devSnapFaciliterConfigs: configs }, () => {});
     });
 }
 
