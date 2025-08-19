@@ -1,9 +1,7 @@
 let ips = [];
-let ipNames = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     loadIPs();
-    loadIPNames();
     attachEventListeners();
 });
 
@@ -39,17 +37,19 @@ function addIP() {
         return;
     }
     
-    if (ips.includes(ip)) {
+    const existingIP = ips.find(item => (typeof item === 'string' ? item : item.ip) === ip);
+    if (existingIP) {
         console.log('ip ja cadastrado');
         return;
     }
     
-    ips.push(ip);
+    const newIPObject = {
+        ip: ip,
+        enabled: true,
+        name: name || null
+    };
     
-    if (name) {
-        ipNames[ip] = name;
-        saveIPNames();
-    }
+    ips.push(newIPObject);
     
     saveIPs();
     ipInput.value = '';
@@ -75,27 +75,34 @@ function addCurrentUrl() {
                 return;
             }
             
-            if (ips.includes(urlToAdd)) {
+            const existingIP = ips.find(item => (typeof item === 'string' ? item : item.ip) === urlToAdd);
+            if (existingIP) {
                 console.log('URL já cadastrada:', urlToAdd);
                 return;
             }
             
-            ips.push(urlToAdd);
+            const newIPObject = {
+                ip: urlToAdd,
+                enabled: true,
+                name: null
+            };
+            
+            ips.push(newIPObject);
             saveIPs();
             renderTable();
         }
     });
 }
 
-function removeIP(ip) {
-    ips = ips.filter(item => item !== ip);
-
-    delete ipNames[ip];
-    saveIPNames();
+function removeIP(ipToRemove) {
+    ips = ips.filter(item => {
+        const ip = typeof item === 'string' ? item : item.ip;
+        return ip !== ipToRemove;
+    });
 
     chrome.storage.sync.get('devSnapFaciliterConfigs', (result) => {
         const configs = result.devSnapFaciliterConfigs || {};
-        delete configs[ip];
+        delete configs[ipToRemove];
         chrome.storage.sync.set({ devSnapFaciliterConfigs: configs });
     });
     
@@ -113,12 +120,21 @@ function renderTable() {
     
     table.innerHTML = '';
     
-    ips.forEach(ip => {
+    ips.forEach((item, index) => {
         const ipItem = document.createElement('div');
+        const checkbox = document.createElement('input');
         const ipSpan = document.createElement('span');
         const button = document.createElement('button');
         
-        const displayName = ipNames[ip] || ip;
+        const ip = typeof item === 'string' ? item : item.ip;
+        const enabled = typeof item === 'string' ? true : item.enabled !== false;
+        const name = typeof item === 'string' ? null : item.name;
+        
+        checkbox.type = 'checkbox';
+        checkbox.checked = enabled;
+        checkbox.addEventListener('change', () => toggleIP(index, checkbox.checked));
+        
+        const displayName = name || ip;
         ipSpan.textContent = displayName;
         ipSpan.style.cursor = 'pointer';
         ipSpan.style.textDecoration = 'underline';
@@ -127,6 +143,7 @@ function renderTable() {
         button.textContent = 'Remover';
         button.addEventListener('click', () => removeIP(ip));
         
+        ipItem.appendChild(checkbox);
         ipItem.appendChild(ipSpan);
         ipItem.appendChild(button);
         table.appendChild(ipItem);
@@ -137,27 +154,27 @@ function openConfig(ip) {
     window.location.href = `config/index.html?ip=${encodeURIComponent(ip)}`;
 }
 
-function saveIPs() {
-    chrome.storage.sync.set({ devSnapFaciliterIPs: ips });
+function toggleIP(index, enabled) {
+    if (typeof ips[index] === 'string') {
+        ips[index] = {
+            ip: ips[index],
+            enabled: enabled,
+            name: null
+        };
+    } else {
+        ips[index].enabled = enabled;
+    }
+    saveIPs();
 }
 
-function saveIPNames() {
-    chrome.storage.sync.set({ devSnapFaciliterIPNames: ipNames });
+function saveIPs() {
+    chrome.storage.sync.set({ devSnapFaciliterIPs: ips });
 }
 
 function loadIPs() {
     chrome.storage.sync.get('devSnapFaciliterIPs', (result) => {
         if (result.devSnapFaciliterIPs) {
             ips = result.devSnapFaciliterIPs;
-        }
-        renderTable();
-    });
-}
-
-function loadIPNames() {
-    chrome.storage.sync.get('devSnapFaciliterIPNames', (result) => {
-        if (result.devSnapFaciliterIPNames) {
-            ipNames = result.devSnapFaciliterIPNames;
         }
         renderTable();
     });

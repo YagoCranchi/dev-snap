@@ -1,10 +1,10 @@
 let currentIP = '';
 let functionalities = [];
-let ipNames = {};
+let ips = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     getCurrentIP();
-    loadIPNames();
+    loadIPs();
     loadIPConfig();
     attachEventListeners();
 });
@@ -16,7 +16,12 @@ function getCurrentIP() {
 }
 
 function updateTitle() {
-    const displayName = ipNames[currentIP] || currentIP;
+    const ipObj = ips.find(item => {
+        const ip = typeof item === 'string' ? item : item.ip;
+        return ip === currentIP;
+    });
+    
+    const displayName = (ipObj && typeof ipObj === 'object' && ipObj.name) ? ipObj.name : currentIP;
     document.getElementById('ipTitle').textContent = `Configurar ${displayName}`;
 }
 
@@ -43,7 +48,8 @@ function addFunctionality() {
     
     const newItem = {
         name: selectedValue,
-        order: functionalities.length
+        order: functionalities.length,
+        enabled: true
     };
     
     functionalities.push(newItem);
@@ -56,6 +62,11 @@ function addFunctionality() {
 function removeFunctionality(index) {
     functionalities.splice(index, 1);
     renderFunctionalityTable();
+    saveConfig();
+}
+
+function toggleFunctionality(index, enabled) {
+    functionalities[index].enabled = enabled;
     saveConfig();
 }
 
@@ -75,6 +86,7 @@ function renderFunctionalityTable() {
     
     functionalities.forEach((functionality, index) => {
         const funcItem = document.createElement('div');
+        const checkbox = document.createElement('input');
         const orderSpan = document.createElement('span');
         const funcSpan = document.createElement('span');
         const editNameBtn = document.createElement('button');
@@ -84,6 +96,11 @@ function renderFunctionalityTable() {
         
         const functionalityName = typeof functionality === 'object' ? functionality.name : functionality;
         const customName = typeof functionality === 'object' ? functionality.customName : null;
+        const enabled = typeof functionality === 'object' ? functionality.enabled !== false : true;
+        
+        checkbox.type = 'checkbox';
+        checkbox.checked = enabled;
+        checkbox.addEventListener('change', () => toggleFunctionality(index, checkbox.checked));
         
         orderSpan.textContent = `${index + 1}. `;
         
@@ -123,6 +140,7 @@ function renderFunctionalityTable() {
         removeButton.textContent = 'Remover';
         removeButton.addEventListener('click', () => removeFunctionality(index));
         
+        funcItem.appendChild(checkbox);
         funcItem.appendChild(orderSpan);
         funcItem.appendChild(funcSpan);
         funcItem.appendChild(editNameBtn);
@@ -164,18 +182,34 @@ function goBack() {
 }
 
 function editName() {
-    const currentName = ipNames[currentIP] || '';
+    const ipObj = ips.find(item => {
+        const ip = typeof item === 'string' ? item : item.ip;
+        return ip === currentIP;
+    });
+    
+    const currentName = (ipObj && typeof ipObj === 'object' && ipObj.name) ? ipObj.name : '';
     const newName = prompt('Digite o novo nome:', currentName);
     
     if (newName !== null) {
-        if (newName.trim() === '') {
-            delete ipNames[currentIP];
-        } else {
-            ipNames[currentIP] = newName.trim();
-        }
+        const ipIndex = ips.findIndex(item => {
+            const ip = typeof item === 'string' ? item : item.ip;
+            return ip === currentIP;
+        });
         
-        saveIPNames();
-        updateTitle();
+        if (ipIndex !== -1) {
+            if (typeof ips[ipIndex] === 'string') {
+                ips[ipIndex] = {
+                    ip: ips[ipIndex],
+                    enabled: true,
+                    name: newName.trim() || null
+                };
+            } else {
+                ips[ipIndex].name = newName.trim() || null;
+            }
+            
+            saveIPs();
+            updateTitle();
+        }
     }
 }
 
@@ -199,16 +233,20 @@ function editFunctionalityName(index) {
 }
 
 function saveIPNames() {
-    chrome.storage.sync.set({ devSnapFaciliterIPNames: ipNames });
+    chrome.storage.sync.set({ devSnapFaciliterIPs: ips });
 }
 
-function loadIPNames() {
-    chrome.storage.sync.get('devSnapFaciliterIPNames', (result) => {
-        if (result.devSnapFaciliterIPNames) {
-            ipNames = result.devSnapFaciliterIPNames;
+function loadIPs() {
+    chrome.storage.sync.get('devSnapFaciliterIPs', (result) => {
+        if (result.devSnapFaciliterIPs) {
+            ips = result.devSnapFaciliterIPs;
         }
         updateTitle();
     });
+}
+
+function saveIPs() {
+    chrome.storage.sync.set({ devSnapFaciliterIPs: ips });
 }
 
 function loadIPConfig() {
@@ -219,7 +257,10 @@ function loadIPConfig() {
         if (Array.isArray(ipConfig)) {
             functionalities = ipConfig.map((item, index) => {
                 if (typeof item === 'string') {
-                    return { name: item, order: index };
+                    return { name: item, order: index, enabled: true };
+                }
+                if (item.enabled === undefined) {
+                    item.enabled = true;
                 }
                 return item;
             });
