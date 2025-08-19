@@ -1,7 +1,9 @@
 let ips = [];
+let ipNames = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     loadIPs();
+    loadIPNames();
     attachEventListeners();
 });
 
@@ -9,6 +11,7 @@ function attachEventListeners() {
     const addButton = document.getElementById('addButton');
     const addCurrentUrlButton = document.getElementById('addCurrentUrlButton');
     const ipInput = document.getElementById('ipInput');
+    const nameInput = document.getElementById('nameInput');
     
     addButton.addEventListener('click', addIP);
     addCurrentUrlButton.addEventListener('click', addCurrentUrl);
@@ -18,11 +21,19 @@ function attachEventListeners() {
             addIP();
         }
     });
+    
+    nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            addIP();
+        }
+    });
 }
 
 function addIP() {
     const ipInput = document.getElementById('ipInput');
+    const nameInput = document.getElementById('nameInput');
     const ip = ipInput.value.trim();
+    const name = nameInput.value.trim();
 
     if (!ip) {
         return;
@@ -34,8 +45,15 @@ function addIP() {
     }
     
     ips.push(ip);
+    
+    if (name) {
+        ipNames[ip] = name;
+        saveIPNames();
+    }
+    
     saveIPs();
     ipInput.value = '';
+    nameInput.value = '';
     renderTable();
 }
 
@@ -72,6 +90,9 @@ function addCurrentUrl() {
 function removeIP(ip) {
     ips = ips.filter(item => item !== ip);
 
+    delete ipNames[ip];
+    saveIPNames();
+
     chrome.storage.sync.get('devSnapFaciliterConfigs', (result) => {
         const configs = result.devSnapFaciliterConfigs || {};
         delete configs[ip];
@@ -97,7 +118,8 @@ function renderTable() {
         const ipSpan = document.createElement('span');
         const button = document.createElement('button');
         
-        ipSpan.textContent = ip;
+        const displayName = ipNames[ip] || ip;
+        ipSpan.textContent = displayName;
         ipSpan.style.cursor = 'pointer';
         ipSpan.style.textDecoration = 'underline';
         ipSpan.addEventListener('click', () => openConfig(ip));
@@ -119,10 +141,23 @@ function saveIPs() {
     chrome.storage.sync.set({ devSnapFaciliterIPs: ips });
 }
 
+function saveIPNames() {
+    chrome.storage.sync.set({ devSnapFaciliterIPNames: ipNames });
+}
+
 function loadIPs() {
     chrome.storage.sync.get('devSnapFaciliterIPs', (result) => {
         if (result.devSnapFaciliterIPs) {
             ips = result.devSnapFaciliterIPs;
+        }
+        renderTable();
+    });
+}
+
+function loadIPNames() {
+    chrome.storage.sync.get('devSnapFaciliterIPNames', (result) => {
+        if (result.devSnapFaciliterIPNames) {
+            ipNames = result.devSnapFaciliterIPNames;
         }
         renderTable();
     });

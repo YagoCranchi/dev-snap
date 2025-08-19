@@ -1,8 +1,10 @@
 let currentIP = '';
 let functionalities = [];
+let ipNames = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     getCurrentIP();
+    loadIPNames();
     loadIPConfig();
     attachEventListeners();
 });
@@ -10,11 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
 function getCurrentIP() {
     const urlParams = new URLSearchParams(window.location.search);
     currentIP = urlParams.get('ip') || '';
-    document.getElementById('ipTitle').textContent = `Configurar ${currentIP}`;
+    updateTitle();
+}
+
+function updateTitle() {
+    const displayName = ipNames[currentIP] || currentIP;
+    document.getElementById('ipTitle').textContent = `Configurar ${displayName}`;
 }
 
 function attachEventListeners() {
     document.getElementById('backButton').addEventListener('click', goBack);
+    document.getElementById('editNameButton').addEventListener('click', editName);
     document.getElementById('addFunctionButton').addEventListener('click', addFunctionality);
     
     const select = document.getElementById('functionalitySelect');
@@ -69,14 +77,18 @@ function renderFunctionalityTable() {
         const funcItem = document.createElement('div');
         const orderSpan = document.createElement('span');
         const funcSpan = document.createElement('span');
+        const editNameBtn = document.createElement('button');
         const upButton = document.createElement('button');
         const downButton = document.createElement('button');
         const removeButton = document.createElement('button');
         
         const functionalityName = typeof functionality === 'object' ? functionality.name : functionality;
+        const customName = typeof functionality === 'object' ? functionality.customName : null;
         
         orderSpan.textContent = `${index + 1}. `;
-        funcSpan.textContent = functionalityName;
+        
+        const displayName = customName || functionalityName;
+        funcSpan.textContent = displayName;
         
         if (functionalityName === 'click') {
             funcSpan.style.cursor = 'pointer';
@@ -96,6 +108,10 @@ function renderFunctionalityTable() {
             funcSpan.addEventListener('click', () => openRedirectConfig(index));
         }
         
+        editNameBtn.textContent = 'Editar Nome';
+        editNameBtn.title = 'Editar nome';
+        editNameBtn.addEventListener('click', () => editFunctionalityName(index));
+        
         upButton.textContent = '↑';
         upButton.disabled = index === 0;
         upButton.addEventListener('click', () => moveUp(index));
@@ -109,6 +125,7 @@ function renderFunctionalityTable() {
         
         funcItem.appendChild(orderSpan);
         funcItem.appendChild(funcSpan);
+        funcItem.appendChild(editNameBtn);
         funcItem.appendChild(upButton);
         funcItem.appendChild(downButton);
         funcItem.appendChild(removeButton);
@@ -144,6 +161,54 @@ function updateOrders() {
 
 function goBack() {
     window.location.href = '../index.html';
+}
+
+function editName() {
+    const currentName = ipNames[currentIP] || '';
+    const newName = prompt('Digite o novo nome:', currentName);
+    
+    if (newName !== null) {
+        if (newName.trim() === '') {
+            delete ipNames[currentIP];
+        } else {
+            ipNames[currentIP] = newName.trim();
+        }
+        
+        saveIPNames();
+        updateTitle();
+    }
+}
+
+function editFunctionalityName(index) {
+    const functionality = functionalities[index];
+    const currentCustomName = functionality.customName || '';
+    const functionalityType = functionality.name;
+    
+    const newName = prompt(`Digite um nome personalizado para "${functionalityType}":`, currentCustomName);
+    
+    if (newName !== null) {
+        if (newName.trim() === '') {
+            delete functionality.customName;
+        } else {
+            functionality.customName = newName.trim();
+        }
+        
+        renderFunctionalityTable();
+        saveConfig();
+    }
+}
+
+function saveIPNames() {
+    chrome.storage.sync.set({ devSnapFaciliterIPNames: ipNames });
+}
+
+function loadIPNames() {
+    chrome.storage.sync.get('devSnapFaciliterIPNames', (result) => {
+        if (result.devSnapFaciliterIPNames) {
+            ipNames = result.devSnapFaciliterIPNames;
+        }
+        updateTitle();
+    });
 }
 
 function loadIPConfig() {
