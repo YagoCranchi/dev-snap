@@ -1,0 +1,127 @@
+@import url('reset.css');
+
+body{
+    width: 350px;
+    color: #373737;
+    font-size: 0.9rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h2 {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+input {
+    height: 30px;
+    padding: 0px 12px;
+    border: 1px solid #bdbdbd;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fff;
+    color: #373737;
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+input:focus {
+    border-color: #648cd6;
+    box-shadow: 0 0 0 2px #e3f0fc;
+}
+
+select {
+    height: 30px;
+    padding: 0px 10px;
+    border: 1px solid #bdbdbd;
+    border-radius: 6px;
+    outline: none;
+    color: #373737;
+    width: 100%;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #648cd6;
+    box-shadow: 0 0 0 2px #e3f0fc;
+}
+
+.header {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 10px;
+
+}
+
+.line-group {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-remove {
+    display: flex;
+    border: none;
+    line-height: 18px;
+    height: 18px;
+    width: 18px;
+    color: #565656;
+    font-weight: bold;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    
+}
+
+.btn-remove:hover {
+    background-color: #d66b6b;
+    color: white;
+    
+}
+
+.btn-primary {
+    height: 30px;
+    background-color: #3467c7;
+    color: white;
+    border: none;
+    padding: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #2f5eb4;
+}
+
+.btn-back {
+    background-color: transparent;
+    border: none;
+    padding: 5px ;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 25px;
+}
+
+.btn-back:hover {
+    background-color: #e6effc;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+}
+
