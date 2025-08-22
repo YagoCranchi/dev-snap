@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div>
-        <div>
-            <input type="text" id="nameInput" placeholder="Nome (opcional)">
-            <input type="text" id="ipInput" placeholder="IP">
-            <button id="addButton">Adicionar</button>
-            <button id="addCurrentUrlButton">Adicionar URL Atual</button>
+        <div class="header">
+            <div class="line-group">
+                <input type="text" id="ipInput" class="input" placeholder="https://exemplo.com">
+                <button id="addButton" class="btn-primary">Adicionar</button>
+            </div>
+            <button id="addCurrentUrlButton" class="secondaryButton">Adicionar URL Atual</button>
         </div>
         
-        <div id="ipTable">
+        <div id="ipTable" class="ipList">
         </div>
     </div>
     

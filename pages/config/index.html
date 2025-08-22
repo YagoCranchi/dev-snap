@@ -5,30 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurar IP</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div>
-        <button id="backButton">← Voltar</button>
-        <h2 id="ipTitle">Configurar IP</h2>
-        
-        <div>
-            <button id="editNameButton">Editar Nome</button>
+        <div class="header">
+            <div class="line-group">
+                <button id="backButton" class="btn-back">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 id="ipTitle">Configurar IP</h2>
+                <div>
+                    <button id="editNameButton">Editar Nome</button>
+                </div>
+            </div>
         </div>
         
-        <div>
-            <h3>Funcionalidades:</h3>
-            
-            <div>
-                <select id="functionalitySelect">
+        <div class="content">            
+            <div class="line-group">
+                <select id="functionalitySelect" aria-placeholder="teste">
+
                     <option value="">Selecionar funcionalidade</option>
                     <option value="click">Click</option>
                     <option value="value">Value</option>
                     <option value="redirect">Redirect</option>
                 </select>
-                <button id="addFunctionButton">Adicionar</button>
+                <button id="addFunctionButton" class="btn-primary">Adicionar</button>
             </div>
             
-            <div id="functionalityTable">
+            <div id="functionalityTable" class="listFunc">
             </div>
         </div>
     </div>

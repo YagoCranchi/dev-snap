@@ -126,6 +126,9 @@ function renderTable() {
         const ipSpan = document.createElement('span');
         const button = document.createElement('button');
         
+<<<<<<< HEAD
+        ipSpan.innerHTML = `<i class="fa-solid fa-globe" style="margin-right:6px;"></i>${ip}`;
+=======
         const ip = typeof item === 'string' ? item : item.ip;
         const enabled = typeof item === 'string' ? true : item.enabled !== false;
         const name = typeof item === 'string' ? null : item.name;
@@ -138,9 +141,11 @@ function renderTable() {
         ipSpan.textContent = displayName;
         ipSpan.style.cursor = 'pointer';
         ipSpan.style.textDecoration = 'underline';
+>>>>>>> main
         ipSpan.addEventListener('click', () => openConfig(ip));
         
-        button.textContent = 'Remover';
+        button.textContent = 'x';
+        button.className = 'btn-remove';
         button.addEventListener('click', () => removeIP(ip));
         
         ipItem.appendChild(checkbox);

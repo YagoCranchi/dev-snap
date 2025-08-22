@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurar Click</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div>
-        <button id="backButton">← Voltar</button>
-        <h2 id="clickTitle">Configurar Click</h2>
+    <div> 
+        <div class="header">
+            <div class="line-group">
+               <button id="backButton" class="btn-back">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h2 id="clickTitle">Configurar Click</h2>
+            </div>
+        </div>
         
-        <div>
+        <div class="content">
             <h3>Configurações do Click:</h3>
             
             <div>
@@ -25,7 +32,10 @@
             </div>
         </div>
         
-        <button id="saveClickButton">Salvar Click</button>
+        <div class="footer">
+            <button id="saveClickButton" class="btn-primary">Salvar Click</button>
+        </div>
+        
     </div>
     
     <script src="script.js"></script>

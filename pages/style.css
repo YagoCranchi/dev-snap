@@ -1,0 +1,33 @@
+
+@import url('../css/global.css');
+
+.ipList {
+    padding: 15px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ipList>div {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 8px 10px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.ipList>div>span {
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ipList>div>span:hover {
+    text-decoration: underline;
+}

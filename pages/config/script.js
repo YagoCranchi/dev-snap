@@ -108,20 +108,14 @@ function renderFunctionalityTable() {
         funcSpan.textContent = displayName;
         
         if (functionalityName === 'click') {
-            funcSpan.style.cursor = 'pointer';
-            funcSpan.style.textDecoration = 'underline';
             funcSpan.addEventListener('click', () => openClickConfig(index));
         }
         
         if (functionalityName === 'value') {
-            funcSpan.style.cursor = 'pointer';
-            funcSpan.style.textDecoration = 'underline';
             funcSpan.addEventListener('click', () => openValueConfig(index));
         }
         
         if (functionalityName === 'redirect') {
-            funcSpan.style.cursor = 'pointer';
-            funcSpan.style.textDecoration = 'underline';
             funcSpan.addEventListener('click', () => openRedirectConfig(index));
         }
         
@@ -129,15 +123,18 @@ function renderFunctionalityTable() {
         editNameBtn.title = 'Editar nome';
         editNameBtn.addEventListener('click', () => editFunctionalityName(index));
         
-        upButton.textContent = '↑';
+        upButton.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
+        upButton.className = 'btn-arrow';
         upButton.disabled = index === 0;
         upButton.addEventListener('click', () => moveUp(index));
         
-        downButton.textContent = '↓';
+        downButton.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+        downButton.className = 'btn-arrow';
         downButton.disabled = index === functionalities.length - 1;
         downButton.addEventListener('click', () => moveDown(index));
         
-        removeButton.textContent = 'Remover';
+        removeButton.textContent = 'x';
+        removeButton.className = 'btn-remove';
         removeButton.addEventListener('click', () => removeFunctionality(index));
         
         funcItem.appendChild(checkbox);
@@ -146,6 +143,14 @@ function renderFunctionalityTable() {
         funcItem.appendChild(editNameBtn);
         funcItem.appendChild(upButton);
         funcItem.appendChild(downButton);
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'spanValue';
+
+        groupDiv.appendChild(orderSpan);
+        groupDiv.appendChild(funcSpan);
+
+        funcItem.appendChild(groupDiv);
         funcItem.appendChild(removeButton);
         table.appendChild(funcItem);
     });

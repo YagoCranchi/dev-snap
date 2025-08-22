@@ -1,0 +1,45 @@
+@import url('../../css/global.css');
+
+.listFunc {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.listFunc > div {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 8px 10px;
+    display: flex;
+    gap: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.listFunc > div > span {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.listFunc > div > span:hover {
+    text-decoration: underline;
+}
+
+.listFunc .spanValue{
+    display: flex;
+    width: 100%;
+}
+
+.btn-arrow {
+    border: none;
+    border-radius: 5px;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+}
+
+.btn-arrow:hover {
+    background-color: #648cd6;
+    color: white;
+}
