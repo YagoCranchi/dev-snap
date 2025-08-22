@@ -79,12 +79,23 @@ input[type="checkbox"] {
     width: 100%;
 }
 
+.w-70 {
+    width: 70%;
+}
+
 .flex {
     display: flex;
 }
 
 .content-between {
     justify-content: space-between;
+}
+
+.title {
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .btn-remove {

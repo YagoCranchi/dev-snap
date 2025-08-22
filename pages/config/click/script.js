@@ -11,7 +11,15 @@ function getParams() {
     const urlParams = new URLSearchParams(window.location.search);
     currentIP = urlParams.get('ip') || '';
     clickIndex = urlParams.get('index') || '';
-    document.getElementById('clickTitle').textContent = `Configurar Click - ${currentIP}`;
+    
+    chrome.storage.sync.get('devSnapFaciliterConfigs', (result) => {
+        const configs = result.devSnapFaciliterConfigs || {};
+        const ipConfig = configs[currentIP] || [];
+        const clickItem = ipConfig[parseInt(clickIndex)];
+        
+        const displayName = (clickItem && clickItem.customName) ? clickItem.customName : "Click";
+        document.getElementById('clickTitle').textContent = `${displayName}`;
+    });
 }
 
 function attachEventListeners() {

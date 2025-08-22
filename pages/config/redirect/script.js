@@ -11,6 +11,15 @@ function getURLParams() {
     const urlParams = new URLSearchParams(window.location.search);
     currentIP = urlParams.get('ip') || '';
     functionalityIndex = parseInt(urlParams.get('index')) || 0;
+
+    chrome.storage.sync.get('devSnapFaciliterConfigs', (result) => {
+        const configs = result.devSnapFaciliterConfigs || {};
+        const ipConfig = configs[currentIP] || [];
+        const functionality = ipConfig[functionalityIndex];
+
+        const displayName = (functionality && functionality.customName) ? functionality.customName : "Redirect";
+        document.getElementById('redirectTitle').textContent = `${displayName}`;
+    });
 }
 
 function attachEventListeners() {
