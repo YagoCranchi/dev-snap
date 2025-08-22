@@ -120,6 +120,8 @@ function renderFunctionalityTable() {
         }
         
         editNameBtn.textContent = 'Editar Nome';
+        editNameBtn.className = 'btn-primary out-line';
+        editNameBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
         editNameBtn.title = 'Editar nome';
         editNameBtn.addEventListener('click', () => editFunctionalityName(index));
         
@@ -140,7 +142,6 @@ function renderFunctionalityTable() {
         funcItem.appendChild(checkbox);
         funcItem.appendChild(orderSpan);
         funcItem.appendChild(funcSpan);
-        funcItem.appendChild(editNameBtn);
         funcItem.appendChild(upButton);
         funcItem.appendChild(downButton);
 
@@ -151,6 +152,7 @@ function renderFunctionalityTable() {
         groupDiv.appendChild(funcSpan);
 
         funcItem.appendChild(groupDiv);
+        funcItem.appendChild(editNameBtn);
         funcItem.appendChild(removeButton);
         table.appendChild(funcItem);
     });

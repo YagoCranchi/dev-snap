@@ -9,29 +9,32 @@ function attachEventListeners() {
     const addButton = document.getElementById('addButton');
     const addCurrentUrlButton = document.getElementById('addCurrentUrlButton');
     const ipInput = document.getElementById('ipInput');
-    const nameInput = document.getElementById('nameInput');
     
-    addButton.addEventListener('click', addIP);
-    addCurrentUrlButton.addEventListener('click', addCurrentUrl);
+    if (addButton) {
+        addButton.addEventListener('click', addIP);
+    }
     
-    ipInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            addIP();
-        }
-    });
+    if (addCurrentUrlButton) {
+        addCurrentUrlButton.addEventListener('click', addCurrentUrl);
+    }
     
-    nameInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            addIP();
-        }
-    });
+    if (ipInput) {
+        ipInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addIP();
+            }
+        });
+    }
 }
 
 function addIP() {
     const ipInput = document.getElementById('ipInput');
-    const nameInput = document.getElementById('nameInput');
+    
+    if (!ipInput) {
+        return;
+    }
+    
     const ip = ipInput.value.trim();
-    const name = nameInput.value.trim();
 
     if (!ip) {
         return;
@@ -53,7 +56,6 @@ function addIP() {
     
     saveIPs();
     ipInput.value = '';
-    nameInput.value = '';
     renderTable();
 }
 
@@ -125,10 +127,6 @@ function renderTable() {
         const checkbox = document.createElement('input');
         const ipSpan = document.createElement('span');
         const button = document.createElement('button');
-        
-<<<<<<< HEAD
-        ipSpan.innerHTML = `<i class="fa-solid fa-globe" style="margin-right:6px;"></i>${ip}`;
-=======
         const ip = typeof item === 'string' ? item : item.ip;
         const enabled = typeof item === 'string' ? true : item.enabled !== false;
         const name = typeof item === 'string' ? null : item.name;
@@ -138,10 +136,9 @@ function renderTable() {
         checkbox.addEventListener('change', () => toggleIP(index, checkbox.checked));
         
         const displayName = name || ip;
-        ipSpan.textContent = displayName;
+        ipSpan.innerHTML = `<i class="fa-solid fa-globe" style="margin-right:6px;"></i>${displayName}`;
         ipSpan.style.cursor = 'pointer';
         ipSpan.style.textDecoration = 'underline';
->>>>>>> main
         ipSpan.addEventListener('click', () => openConfig(ip));
         
         button.textContent = 'x';

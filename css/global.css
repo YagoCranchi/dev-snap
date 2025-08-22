@@ -47,6 +47,11 @@ select:focus {
     box-shadow: 0 0 0 2px #e3f0fc;
 }
 
+input[type="checkbox"] {
+    width: auto;
+    height: auto;
+}
+
 .header {
     padding: 15px;
     border-bottom: 1px solid #e0e0e0;
@@ -57,7 +62,6 @@ select:focus {
     flex-direction: column;
     padding: 15px;
     gap: 10px;
-
 }
 
 .line-group {
@@ -69,6 +73,18 @@ select:focus {
 .input-group {
     display: flex;
     flex-direction: column;
+}
+
+.full {
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.content-between {
+    justify-content: space-between;
 }
 
 .btn-remove {
@@ -83,13 +99,11 @@ select:focus {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    
 }
 
 .btn-remove:hover {
     background-color: #d66b6b;
     color: white;
-    
 }
 
 .btn-primary {
@@ -106,6 +120,21 @@ select:focus {
     background-color: #2f5eb4;
 }
 
+.btn-primary.out-line {
+    height: 30px;
+    border: 1px solid #3467c7;
+    color: #3467c7;
+    background: transparent;
+    padding: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary.out-line:hover {
+    background-color: #2f5eb4;
+    color: white;
+}
+
 .btn-back {
     background-color: transparent;
     border: none;
@@ -117,6 +146,10 @@ select:focus {
 
 .btn-back:hover {
     background-color: #e6effc;
+}
+
+.spanValue:hover {
+    cursor: pointer;
 }
 
 .footer {
