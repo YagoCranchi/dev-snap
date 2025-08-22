@@ -14,8 +14,11 @@ chrome.storage.sync.get(['devSnapFaciliterIPs', 'devSnapFaciliterConfigs'], (res
 function checkCurrentIP() {
     const currentURL = window.location.href;
     
-    registeredIPs.forEach(ip => {
-        if (currentURL.includes(ip)) {
+    registeredIPs.forEach(ipItem => {
+        const ip = typeof ipItem === 'string' ? ipItem : ipItem.ip;
+        const enabled = typeof ipItem === 'string' ? true : ipItem.enabled !== false;
+        
+        if (currentURL.includes(ip) && enabled) {
             const config = ipConfigs[ip] || [];
             
             config
@@ -25,6 +28,8 @@ function checkCurrentIP() {
                     return orderA - orderB;
                 })
                 .forEach((functionality, index) => {
+                    if (functionality.enabled === false) return;
+                    
                     const functionalityName = typeof functionality === 'object' ? functionality.name : functionality;
                     
                     switch (functionalityName) {
